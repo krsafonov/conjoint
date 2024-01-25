@@ -1,7 +1,7 @@
 library(shiny)
 library("googledrive")
 
-function(input, output) {
+function(input, output, session) {
   des = NULL
   alt.cte = NULL
   no.choice = NULL
@@ -30,6 +30,7 @@ function(input, output) {
   c.lvls = list(c(90, 110, 140, 190), c(10, 30, 60))
   data.dir = "./responds/"
   
+  user_id = substr(session$token, 1, 8)
   
   sn<-0
   
@@ -129,8 +130,8 @@ function(input, output) {
     unc_setnr <- rep(1:length(data$responses), each = n.atts)
     unc_d <- cbind(set = unc_setnr, data$survey, resp = unc_resp) 
     # Create unique file names
-    numname <- sprintf("%s_num_data.txt", as.integer(Sys.time()))
-    charname <- sprintf("%s_char_data.txt", as.integer(Sys.time()))
+    numname <- sprintf("%s_num_data.txt", user_id)
+    charname <- sprintf("%s_char_data.txt", user_id)
     # Write files to data.dir
     utils::write.table(
       x = d,
@@ -319,6 +320,7 @@ function(input, output) {
     if (input$OK > (n.total + 1)) {
       # Write data to file
       if (!is.null(data.dir)) {
+        session$sendCustomMessage("mymessage", user_id)
         saveData(data = surveyData, data.dir = data.dir, n.atts = n.atts)
       }
       # Stop application 

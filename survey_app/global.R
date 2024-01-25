@@ -35,7 +35,6 @@ alt <- c(0, 0, 0, 1)
 
 exp <- readRDS("design.RData")
 
-
 des <- exp$design
 set.seed(123)
 true_par <- rnorm(17)

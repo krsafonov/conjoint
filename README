@@ -1,0 +1,8 @@
+The project contains two apps: conjoint app (survey_app) and post-experiment survey.
+
+To deploy them, run in R:
+
+-- deploy("survey_app")
+-- deploy("post_survey_app")
+
+The apps require google authorization, the tokens must be saved in folder .secrets.

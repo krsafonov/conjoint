@@ -5,6 +5,8 @@ rsconnect::setAccountInfo(name='krsafonov',
                           token='xxxxxxxx',
                           secret='xxxxxxxx')
 
-setwd(".")
+setwd("~/survey_app/")
 runApp()
+
 deployApp()
+
