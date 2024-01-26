@@ -1,3 +1,11 @@
 .DS_Store
 .secrets
 survey_app/.secrets/
+responds/
+surveys/
+.ipynb_checkpoints/
+.RHistory
+.RData
+rsconnect/
+survey_app/.DS_Store
+

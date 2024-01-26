@@ -12,7 +12,7 @@ fluidPage(
   # Put answer options on screen
   column(8, align = 'center', uiOutput('buttons')), 
   # put introtext on screen
-  column(8, align = 'center', textOutput('intro')),
+  column(8, align = 'center', htmlOutput('intro')),
   # Put action button on screen
   column(8, align = "center", actionButton("OK", "OK")),
   # put end text on screen

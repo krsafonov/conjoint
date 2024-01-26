@@ -305,7 +305,11 @@ function(input, output, session) {
     } else {output$set.nr <- renderText(NULL)}
   })
   # Introtext
-  output$intro <- renderText(intro.text)
+  # output$intro <- renderText(intro.text)
+  output$intro <- renderUI({
+    HTML(sprintf(intro.text, user_id))
+    
+  })
   observeEvent(input$OK, {
     output$intro <- renderText(NULL)
   })

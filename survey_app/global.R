@@ -60,7 +60,7 @@ labels[[9]] <- c("Interesting", "Intermediate", "Boring") # task
 code <- coded
 
 b.text <- "Please choose the alternative you prefer"
-i.text <- "Welcome, here are some instructions ... good luck!"
+i.text <- readChar('intro.txt', file.info('intro.txt')$size)
 e.text <- "Thanks for taking the survey"
 
 

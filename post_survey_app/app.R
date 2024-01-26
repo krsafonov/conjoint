@@ -62,7 +62,20 @@ survey_page <- div(
 
 # Define shiny UI
 ui <- fluidPage(
-  survey_page
+  fluidPage(
+    shinyjs::useShinyjs(),
+    
+    surveyOutput(survey_questions,
+                 survey_title = "Личная информация",
+                 survey_description = "Пожалуйста, заполните ниже информацию о Ваших персональных данных"),
+    
+    shinyjs::hidden(
+      div(
+        id = "thankyou_msg",
+        h3("Спасибо за участие в опросе, Ваши ответы были записаны!")
+      )
+    )
+  )
 )
 
 # Define shiny server
@@ -75,6 +88,10 @@ server <- function(input, output, session) {
   
   observeEvent(input$submit, {
     response_data <- getSurveyData()
+    
+    shinyjs::reset("form")
+    shinyjs::hide("form")
+    shinyjs::show("thankyou_msg")
     
     query <- parseQueryString(session$clientData$url_search)
     user_id <- query[['user_id']]
