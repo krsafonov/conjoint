@@ -57,25 +57,17 @@ survey_questions <- data.frame(
 survey_page <- div(
   surveyOutput(survey_questions,
                survey_title = "Personal info",
-               survey_description = "Please submit your personal information")
+               survey_description = "Please submit your personal information."
+  )
 )
 
+
+jscode <- "Shiny.addCustomMessageHandler('mymessage', function(message) {window.location = 'https://www.nes.ru';});"
 # Define shiny UI
 ui <- fluidPage(
-  fluidPage(
-    shinyjs::useShinyjs(),
-    
-    surveyOutput(survey_questions,
-                 survey_title = "Личная информация",
-                 survey_description = "Пожалуйста, заполните ниже информацию о Ваших персональных данных"),
-    
-    shinyjs::hidden(
-      div(
-        id = "thankyou_msg",
-        h3("Спасибо за участие в опросе, Ваши ответы были записаны!")
-      )
-    )
-  )
+  tags$head(tags$script(jscode)),
+  textOutput("user_id"),
+  survey_page
 )
 
 # Define shiny server
@@ -86,20 +78,37 @@ server <- function(input, output, session) {
   
   user_id <- as.integer(Sys.time())
   
+  output$user_id <- renderText({
+    query <-parseQueryString(session$clientData$url_search)
+    user_id <- query[['user_id']]
+    if (!is.null(user_id)) {
+      paste("User ID:", user_id)
+    } else {
+      "Мы потеряли по пути ваш уникальный идентификатор. Если Вы сохранили его на прошлом этапе, то перейдите
+      по ссылке https://krsafonov.shinyapps.io/post_survey_app/?user_id=... , где вместо троеточия напишите свой номер."
+    }
+  })
+  
+  observeEvent(input$confirm, {
+    stopApp()
+  })
+  
   observeEvent(input$submit, {
     response_data <- getSurveyData()
-    
-    shinyjs::reset("form")
-    shinyjs::hide("form")
-    shinyjs::show("thankyou_msg")
     
     query <- parseQueryString(session$clientData$url_search)
     user_id <- query[['user_id']]
     
-    print(user_id)
-    numname <- sprintf("%s_num_data.txt", user_id)
-    print(numname)
+    if (is.null(user_id)) {
+      showModal(modalDialog(
+        title = "Уппс",
+        "Мы потеряли по пути ваш уникальный идентификатор. Если Вы сохранили его на прошлом этапе, то перейдите
+      по ссылке https://krsafonov.shinyapps.io/post_survey_app/?user_id=... , где вместо троеточия напишите свой номер.",
+        footer = actionButton("confirm", "Close")
+      ))
+    } else {
     
+    numname <- sprintf("%s_num_data.txt", user_id)
     
     utils::write.table(
       x = response_data,
@@ -109,7 +118,15 @@ server <- function(input, output, session) {
     drive_upload(file.path(data.dir, numname),
                  file.path("surveys", numname)
     )
-    stopApp()
+    
+    showModal(modalDialog(
+      title = "Thank you for completing the survey",
+      "All your answers were saved.",
+      footer = actionButton("confirm", "Close")
+    ))
+    
+    #session$sendCustomMessage("mymessage", "msg")
+    }
   })
 }
 
