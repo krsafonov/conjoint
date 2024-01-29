@@ -2,26 +2,25 @@ library("idefix")
 
 al <- list(
   c("90k", "110k", "140k", "190k"), # wage
-  c("10 min", "30 min", "60 min"), # commute time
-  c("State-owned", "Private", "Non-commerical"), # sectors
-  c("Full-time", "Hybrid", "Online"), # work mode
-  c("Formal", "Intermediate", "Informal"), # corporate culture
-  c("Good", "Intermediate", "Bad"), # Office
-  c("yes", "no"), # promotion criterion
-  c("less than 25", "25-35", "35-45", 'greater than 45'), # average age of the team
-  c("Interesting", "Intermediate", "Boring") # task
+  c("10 мин", "30 мин", "60 мин"), # commute time
+  c("Full-time", "Гибрид", "Полностью удаленный"), # work mode
+  c("Формальная", "Промежуточная", "Неформальная"), # corporate culture
+  c("Хорошо обустроенный", "Средне обустроенный", "Плохо обустроенный"), # Office
+  c("В течение 1 года", "В течение 3 лет", "В течение 5 лет"), # promotion criterion
+  c("< 25", "25 - 35", "35 - 45", '> 45'), # average age of the team
+  c("20%", "50%", "70%") # task
 )
 
 mu <- c(70, # no.choice (constant utility)
         1, # wage (constant utility)
-        -1/3,
-        +30, +10,
-        +10, +20,
-        +10, +20,
-        -10, -20,
-        -10,
-        0, -5, -15,
-        0, 0)
+        -1/3, # commute time
+        -20, -10, # work mode
+        -20, -10, # corporate culture
+        +20, +10, # Office
+        +20, +10, # promotion criterion
+        +5, +5, -5, # average age of the team
+        0, -5 # task
+)
 
 v <- diag(length(mu[c(-1, -2)])) # Prior variance.
 set.seed(123)
@@ -30,37 +29,53 @@ no.choice.pd <- matrix(rep(mu[1], 10))
 wage.pd <- matrix(rep(mu[2], 10))
 pd <- cbind(wage.pd, pd)
 ps <- list(no.choice.pd, pd)
-coded <- c("C", "C", "D", "D", "D", "D", "D", "D", "D")
+coded <- c("C", "C", "D", "D", "D", "D", "D", "D")
 alt <- c(0, 0, 0, 1)
 
-exp <- readRDS("design.RData")
+exp <- readRDS("design_new.RData")
 
 des <- exp$design
-set.seed(123)
-true_par <- rnorm(17)
-RespondMNL(par = true_par, des = exp$design, n.alts = 4)
 
 # Survey App
 n.sets <- 25
-alternatives <- c("Alternative A", "Alternative B", "Alternative C", "None")
-attributes <- c('wage', 'commute_time', 'sectors', 'work_mode', 'corporate_culture',
+alternatives_eng <- c("Alternative A", "Alternative B", "Alternative C", "None")
+attributes_eng <- c('wage', 'commute_time', 'sectors', 'work_mode', 'corporate_culture',
                 'office', 'promotion', 'team_age', 'task')
 
-labels <- vector(mode = "list", length(attributes))
-labels[[1]] <- c("90k", "110k", "140k", "190k") # wage
-labels[[2]] <- c("10 min", "30 min", "60 min") # commute time
-labels[[3]] <- c("State-owned", "Private", "Non-commerical") # sectors
-labels[[4]] <- c("Full-time", "Hybrid", "Online") # work mode
-labels[[5]] <- c("Formal", "Intermediate", "Informal") # corporate culture
-labels[[6]] <- c("Good", "Intermediate", "Bad") # Office
-labels[[7]] <- c("yes", "no") # promotion criterion
-labels[[8]] <- c("less than 25", "25-35", "35-45", 'greater than 45') # average age of the team
-labels[[9]] <- c("Interesting", "Intermediate", "Boring") # task
+labels_eng <- vector(mode = "list", length(attributes))
+labels_eng[[1]] <- c("90k", "110k", "140k", "190k") # wage
+labels_eng[[2]] <- c("10 min", "30 min", "60 min") # commute time
+labels_eng[[3]] <- c("State-owned", "Private", "Non-commerical") # sectors
+labels_eng[[4]] <- c("Full-time", "Hybrid", "Online") # work mode
+labels_eng[[5]] <- c("Formal", "Intermediate", "Informal") # corporate culture
+labels_eng[[6]] <- c("Good", "Intermediate", "Bad") # Office
+labels_eng[[7]] <- c("yes", "no") # promotion criterion
+labels_eng[[8]] <- c("< 25", "25 - 35", "35 - 45", '> 45') # average age of the team
+labels_eng[[9]] <- c("20%", "50%", "70%") # task
+
+alternatives_rus <- c("Работа A", "Работа B", "Работа C", "Отказаться от всех")
+attributes_rus <- c('Зарплата', 'Время в пути', 'График работы', 'Корпоративная культура',
+                    'Офис', 'Потенциал повышения', 'Средний возраст коллектива', 'Доля неитересных задач')
+
+labels_rus <- vector(mode = "list", length(attributes))
+labels_rus[[1]] <- c("90k", "110k", "140k", "190k") # wage
+labels_rus[[2]] <- c("10 мин", "30 мин", "60 мин") # commute time
+labels_rus[[3]] <- c("Full-time", "Гибрид", "Полностью удаленный") # work mode
+labels_rus[[4]] <- c("Формальная", "Промежуточная", "Неформальная") # corporate culture
+labels_rus[[5]] <- c("Хорошо обустроенный", "Средне обустроенный", "Плохо обустроенный") # Office
+labels_rus[[6]] <- c("В течение 1 года", "В течение 3 лет", "В течение 5 лет") # promotion criterion
+labels_rus[[7]] <- c("< 25", "25 - 35", "35 - 45", '> 45') # average age of the team
+labels_rus[[8]] <- c("20%", "50%", "70%") # task
 
 code <- coded
 
-b.text <- "Please choose the alternative you prefer"
+# Russian lang selected
+alternatives <- alternatives_rus
+labels <- labels_rus
+attributes <- attributes_rus
+
+b.text <- "Выберете то предложение, которое наиболее привлекательное для Вас"
 i.text <- readChar('intro.txt', file.info('intro.txt')$size)
-e.text <- "Thanks for taking the survey"
+e.text <- "Спасибо за прохождения первой части опроса! Нажмите ОК, чтобы продолжить и заполните небольшую анкету!"
 
 

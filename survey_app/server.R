@@ -301,7 +301,7 @@ function(input, output, session) {
   # set nr
   observeEvent(input$OK, {
     if (sn < n.total) {
-      output$set.nr <- renderText(paste(c("choice set:", sn, "/", n.total)))
+      output$set.nr <- renderText(paste(c("Вопрос:", sn, "/", n.total)))
     } else {output$set.nr <- renderText(NULL)}
   })
   # Introtext

@@ -15,8 +15,8 @@ rsconnect::setAccountInfo(name='krsafonov',
 2. Run
 
 ```
-deploy("survey_app")
-deploy("post_survey_app")
+deployApp("survey_app")
+deployApp("post_survey_app")
 ```
 
 Also, the apps require google authorization, the tokens must be saved in folder ```.secrets```.
