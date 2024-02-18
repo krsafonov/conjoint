@@ -25,14 +25,14 @@ survey_questions <- data.frame(
                rep('Назовите ваш текущий статус:', 2), 
                rep('Назовите ваш текущий заработок:', 6), 
                rep('Назовите индустрию, в которой вы работаете:', 9) #dependent on status - only if works
-               ),
+  ),
   
   option = c( '1', '2', '3', '4',
               'мужской', 'женский',
               'нет опыта', 'до 1 года','от 1 года до 3 лет','от 3 до 5 лет','более 5 лет',
               'работаю','не работаю',
               'нет постоянного заработка','<50','50-100','100-150','150-200','>200',
-              'IT','банкинг','retail','финансы','консалтинг','образование','сельское хозяйство','другое',
+              'Финансы','Консалтинг','IT/E-commerce','Академия & Think Tanks','Реальный сектор','Госсектор', 'Стартап', 'Другое',
               NA
   ),
   input_type = c(rep('mc', 27), 'text'),
@@ -48,7 +48,7 @@ survey_questions <- data.frame(
   dependence = c(rep(NA, 19),
                  rep('status', 8),
                  'industry'), 
-                 
+  
   dependence_value = c(rep(NA, 19), rep('работаю', 8), 'другое'),
   
   required = TRUE
@@ -56,8 +56,8 @@ survey_questions <- data.frame(
 
 survey_page <- div(
   surveyOutput(survey_questions,
-               survey_title = "Personal info",
-               survey_description = "Please submit your personal information."
+               survey_title = "Персональная информация",
+               survey_description = "Ответьте, пожалуйста, на вопросы, касающиеся ваших личных данных."
   )
 )
 
@@ -107,29 +107,28 @@ server <- function(input, output, session) {
         footer = actionButton("confirm", "Close")
       ))
     } else {
-    
-    numname <- sprintf("%s_num_data.txt", user_id)
-    
-    utils::write.table(
-      x = response_data,
-      file = file.path(data.dir, numname), 
-      row.names = TRUE, quote = FALSE, sep = "\t", col.names = NA
-    )
-    drive_upload(file.path(data.dir, numname),
-                 file.path("surveys", numname)
-    )
-    
-    showModal(modalDialog(
-      title = "Thank you for completing the survey",
-      "All your answers were saved.",
-      footer = actionButton("confirm", "Close")
-    ))
-    
-    #session$sendCustomMessage("mymessage", "msg")
+      
+      numname <- sprintf("%s_num_data.txt", user_id)
+      
+      utils::write.table(
+        x = response_data,
+        file = file.path(data.dir, numname), 
+        row.names = TRUE, quote = FALSE, sep = "\t", col.names = NA
+      )
+      drive_upload(file.path(data.dir, numname),
+                   file.path("surveys", numname)
+      )
+      
+      showModal(modalDialog(
+        title = "Спасибо за прохождение опроса!",
+        "Ваши ответы были сохранены.",
+        footer = actionButton("confirm", "Close")
+      ))
+      
+      #session$sendCustomMessage("mymessage", "msg")
     }
   })
 }
 
 # Run the shiny application
 shinyApp(ui, server)
-
