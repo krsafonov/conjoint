@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyWidgets)
 library(shinysurveys)
 library(googledrive)
 library(googlesheets4)
@@ -23,48 +24,51 @@ survey_questions <- data.frame(
                rep("Пол:", 2) ,
                rep('Назовите ваш опыт работы:', 5), 
                rep('Назовите ваш текущий статус:', 2), 
-               rep('Назовите ваш текущий заработок:', 6), 
+               rep('Назовите ваш текущий заработок:', 7), 
                rep('Назовите индустрию, в которой вы работаете:', 9) #dependent on status - only if works
                ),
   
   option = c( '1', '2', '3', '4',
-              'мужской', 'женский',
-              'нет опыта', 'до 1 года','от 1 года до 3 лет','от 3 до 5 лет','более 5 лет',
-              'работаю','не работаю',
-              'нет постоянного заработка','<50','50-100','100-150','150-200','>200',
+              'Мужской', 'Женский',
+              'Нет опыта', 'до 1 года','от 1 года до 3 лет','от 3 до 5 лет','более 5 лет',
+              'Работаю','Не работаю',
+              'Нет постоянного заработка','<50','50-100','100-150','150-200','>200','Предпочитаю не отвечать',
               'Финансы','Консалтинг','IT/E-commerce','Академия & Think Tanks','Реальный сектор','Госсектор', 'Стартап', 'Другое',
               NA
   ),
-  input_type = c(rep('mc', 27), 'text'),
+  input_type = c(rep('mc', 28), 'text'),
   
   input_id = c(rep('course', 4),
                rep('sex', 2),
                rep('experience', 5),
                rep('status', 2),
-               rep('income', 6),
+               rep('income', 7),
                rep('industry', 8),
                'dif_industry'), 
   
-  dependence = c(rep(NA, 19),
+  dependence = c(rep(NA, 20),
                  rep('status', 8),
                  'industry'), 
                  
-  dependence_value = c(rep(NA, 19), rep('работаю', 8), 'другое'),
+  dependence_value = c(rep(NA, 20), rep('Работаю', 8), 'Другое'),
   
   required = TRUE
 )
 
 survey_page <- div(
-  surveyOutput(survey_questions,
-               survey_title = "Персональная информация",
-               survey_description = "Ответьте, пожалуйста, на вопросы, касающиеся ваших личных данных."
+  div(
+    h1("Расскажите о себе", style = "text-align: center; font-size: 250%; "), 
+    p("Приветствуем вас в заключительной части нашего опроса! Основной блок, связанный с выявлением предпочтений gen Z на рынке труда, закончен и теперь мы хотим узнать о вас чуть больше. Ваши ответы помогут нам значительно улучшить качество нашего исследования. Помните, что данные собираются анонимно и будут анализироваться в агрегированной форме. Благодарим за участие!", style = "text-align: center; font-size: 120%; width: 60%; margin: 0 auto"),
+    surveyOutput(survey_questions, style = " font-size: 100%;") 
   )
 )
 
 
 jscode <- "Shiny.addCustomMessageHandler('mymessage', function(message) {window.location = 'https://www.nes.ru';});"
 # Define shiny UI
+# Define shiny UI
 ui <- fluidPage(
+  style = "background-color: ghostwhite;",
   tags$head(tags$script(jscode)),
   textOutput("user_id"),
   survey_page
@@ -132,4 +136,3 @@ server <- function(input, output, session) {
 
 # Run the shiny application
 shinyApp(ui, server)
-
