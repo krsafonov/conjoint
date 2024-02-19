@@ -267,12 +267,13 @@ function(input, output, session) {
       }
     }
   }
+  
   #When action button is clicked
   observeEvent(input$OK, {
     # survey phase 
     if (sn <= n.total ) {
       # Plot new choice set
-      output$choice.set <-  renderTable(Select(), rownames = TRUE)
+      output$choice.set <-  renderTable(Select(), rownames = TRUE, striped = TRUE)
     }
     # Store responses and design
     if (sn > 1 && sn <= (n.total + 1)) {
@@ -304,12 +305,17 @@ function(input, output, session) {
       output$set.nr <- renderText(paste(c("Вопрос:", sn, "/", n.total)))
     } else {output$set.nr <- renderText(NULL)}
   })
+  
+  session$onFlushed(function() {
+    session$sendCustomMessage(type = "activate_tooltips", "")
+  })
+  
   # Introtext
   # output$intro <- renderText(intro.text)
   output$intro <- renderUI({
     HTML(sprintf(intro.text, user_id))
-    
   })
+  
   observeEvent(input$OK, {
     output$intro <- renderText(NULL)
   })

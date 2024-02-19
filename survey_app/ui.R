@@ -1,10 +1,21 @@
 library(shiny)
 
 href <- 'https://krsafonov.shinyapps.io/post_survey_app/?user_id='
-jscode <- sprintf("Shiny.addCustomMessageHandler('mymessage', function(message) {window.location = '%s'+message;});", href)
+
+
+jscode <- paste0(
+  sprintf("Shiny.addCustomMessageHandler('mymessage', function(message) {window.location = '%s'+message;});", href),
+  "Shiny.addCustomMessageHandler('activate_tooltips', function(x) {"
+  ,"$('[data-toggle=\"tooltip\"]').tooltip({"
+  ,"placement: 'right'"
+  ,"});})")
+                
 
 fluidPage(
-  tags$head(tags$script(jscode)),
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "hover.css"),
+    tags$script(jscode),
+  ),
   # Put setnr on screen
   column(8, align = 'center', textOutput("set.nr")),
   # Put design on screen
