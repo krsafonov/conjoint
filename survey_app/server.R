@@ -1,5 +1,31 @@
 library(shiny)
 library("googledrive")
+library(DT)
+library(bslib)
+
+rowCallback <- c(
+  "function(row, data, num, index){",
+  '
+  hints = {
+    "Зарплата": "",
+    "Full-time": "пятидневка с 9 до 17; работать необходимо оффлайн в офисе",
+    "Гибрид": "2-3 дня удаленной работы, остальные дни рабочей недели необходимо лично присутствовать в офисе",
+    
+  }
+  ',
+  "  $('td:eq(0)', row).attr('title', hints[data[0]]).attr('data-toggle', 'tooltip').attr('data-placement', 'right').attr('data-html', 'true');",
+  "  $('td:eq(1)', row).attr('title', hints[data[1]]).attr('data-toggle', 'tooltip').attr('data-placement', 'right').attr('data-html', 'true');",
+  "  $('td:eq(2)', row).attr('title', hints[data[2]]).attr('data-toggle', 'tooltip').attr('data-placement', 'right').attr('data-html', 'true');",
+  "  $('td:eq(3)', row).attr('title', hints[data[3]]).attr('data-toggle', 'tooltip').attr('data-placement', 'right').attr('data-html', 'true');",
+  
+   "}"  
+)
+
+initComplete <- "
+function () {
+  $('[data-toggle=tooltip]').tooltip();
+}
+"
 
 function(input, output, session) {
   des = NULL
@@ -273,7 +299,16 @@ function(input, output, session) {
     # survey phase 
     if (sn <= n.total ) {
       # Plot new choice set
-      output$choice.set <-  renderTable(Select(), rownames = TRUE, striped = TRUE)
+      # output$choice.set <-  renderTable(Select(), rownames = TRUE, striped = TRUE)
+      # browser()
+      output$table1 <- renderDT({
+        datatable(Select(), 
+                  rownames = TRUE,
+                  options = list(dom = 't', pageLength = 20, 
+                                 scrollX = TRUE,
+                                 rowCallback = JS(rowCallback),
+                                 initComplete = JS(initComplete))) 
+      })
     }
     # Store responses and design
     if (sn > 1 && sn <= (n.total + 1)) {

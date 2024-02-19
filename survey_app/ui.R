@@ -1,4 +1,6 @@
 library(shiny)
+library(DT)
+library(bslib)
 
 href <- 'https://krsafonov.shinyapps.io/post_survey_app/?user_id='
 
@@ -12,14 +14,17 @@ jscode <- paste0(
                 
 
 fluidPage(
+  theme = bs_theme(version = 4),
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "hover.css"),
+    # tags$link(rel = "stylesheet", type = "text/css", href = "hover2.css"),
     tags$script(jscode),
   ),
   # Put setnr on screen
   column(8, align = 'center', textOutput("set.nr")),
   # Put design on screen
-  column(8, align = 'center', tableOutput("choice.set")),
+  #column(8, align = 'center', tableOutput("choice.set")),
+  div(DTOutput('table1'), 
+      style="padding-left:50px; padding-right:50px"),
   # Put answer options on screen
   column(8, align = 'center', uiOutput('buttons')), 
   # put introtext on screen
