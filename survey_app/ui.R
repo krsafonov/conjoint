@@ -20,17 +20,17 @@ fluidPage(
     tags$script(jscode),
   ),
   # Put setnr on screen
-  column(8, align = 'center', textOutput("set.nr")),
+  column(12, align = 'center', textOutput("set.nr")),
   # Put design on screen
   #column(8, align = 'center', tableOutput("choice.set")),
   div(DTOutput('table1'), 
       style="padding-left:50px; padding-right:50px"),
   # Put answer options on screen
-  column(8, align = 'center', uiOutput('buttons')), 
+  column(12, align = 'center', uiOutput('buttons')), 
   # put introtext on screen
-  column(8, align = 'center', htmlOutput('intro')),
+  column(12, align = 'center', htmlOutput('intro')),
   # Put action button on screen
-  column(8, align = "center", actionButton("OK", "OK")),
+  column(12, align = "center", actionButton("OK", "OK")),
   # put end text on screen
-  column(8, align = 'center', textOutput('end'))
+  column(12, align = 'center', textOutput('end'))
 )
