@@ -29,7 +29,7 @@ rowCallback <- c(
   "  $('td:eq(2)', row).attr('title', hints[data[2]]).attr('data-toggle', 'tooltip').attr('data-placement', 'right').attr('data-html', 'true');",
   "  $('td:eq(3)', row).attr('title', hints[data[3]]).attr('data-toggle', 'tooltip').attr('data-placement', 'right').attr('data-html', 'true');",
   
-   "}"  
+  "}"  
 )
 
 initComplete <- "
@@ -69,7 +69,7 @@ function(input, output, session) {
   
   user_id = substr(session$token, 1, 8)
   
-  sn<-0
+  sn<- -2
   
   n.atts <- length(atts)
   n.alts <- length(alts)
@@ -242,7 +242,7 @@ function(input, output, session) {
                       s[ , -c(1:sum(alt.cte))])
           }
           # From second set
-        } else {
+        } else if (sn > 1){
           # Sample draws from updated posterior
           sam <- ImpsampMNL(n.draws = n.draws, prior.mean = prior.mean, 
                             prior.covar = prior.covar,
@@ -275,7 +275,7 @@ function(input, output, session) {
           rownames(set) <- rownames(set, do.NULL = FALSE, prefix = paste(paste("set", sn , sep = ""), "alt", sep = "."))
           colnames(set) <- c(rowcol[[2]], paste("par", 1:(ncol(set) - n.cte), sep = "."))
           fulldes <<- set
-        } else {
+        } else if (sn > 1) {
           rowcol <- Rcnames(n.sets = 1, n.alts = n.alts, alt.cte = alt.cte, no.choice = FALSE)
           rownames(set) <- rownames(set, do.NULL = FALSE, prefix = paste(paste("set", sn , sep = ""), "alt", sep = "."))
           colnames(set) <- c(rowcol[[2]], paste("par", 1:(ncol(set) - n.cte), sep = "."))
@@ -292,7 +292,7 @@ function(input, output, session) {
       # Store uncoded choice set
       if (sn == 1) {
         choice.sets <<- choice.set
-      } else {
+      } else if (sn > 1) {
         choice.sets <<- rbind(choice.sets, choice.set)
       }
       #return design 
@@ -308,7 +308,7 @@ function(input, output, session) {
   #When action button is clicked
   observeEvent(input$OK, {
     # survey phase 
-    if (sn <= n.total ) {
+    if (sn <= n.total && sn >= 1) {
       # Plot new choice set
       # output$choice.set <-  renderTable(Select(), rownames = TRUE, striped = TRUE)
       # browser()
@@ -322,6 +322,11 @@ function(input, output, session) {
                                  initComplete = JS(initComplete))) 
       })
     }
+    else if (sn > n.total) {
+      #Don't show choice set
+      output$table1 <- renderDT(NULL)}
+  })
+  
     # Store responses and design
     if (sn > 1 && sn <= (n.total + 1)) {
       resp  <<- c(resp, input$survey)
@@ -333,22 +338,21 @@ function(input, output, session) {
       surveyData <<- sdata 
     } 
     # end phase 
-    if (sn > n.total) {
-      #Don't show choice set
-      output$choice.set <-  renderTable(NULL)
-    }
-  })
+
   #Output response options after first action button click
-  output$buttons <- renderUI({
+  observeEvent(input$OK,{
+    output$buttons <- renderUI({
     # radiobuttons
-    if (input$OK > 0 && input$OK <= n.total) {
+    if (sn <= n.total && sn >= 1) {
       return(list(radioButtons("survey", buttons.text,
                                alts , inline = TRUE, selected = "None")))
     }
   })
+  })
+  
   # set nr
   observeEvent(input$OK, {
-    if (sn < n.total) {
+    if (sn <= n.total && sn >= 1) {
       output$set.nr <- renderText(paste(c("Вопрос:", sn, "/", n.total)))
     } else {output$set.nr <- renderText(NULL)}
   })
@@ -364,17 +368,29 @@ function(input, output, session) {
   })
   
   observeEvent(input$OK, {
-    output$intro <- renderText(NULL)
+    if (sn == -1) {
+      output$intro <- renderUI({
+        HTML(sprintf(readChar('intro_2.txt', file.info('intro_2.txt')$size), user_id))
+      })
+    }
+    else if (sn == 0)
+    {
+      output$intro <- renderUI({
+        HTML(sprintf(readChar('intro_3.txt', file.info('intro_3.txt')$size), user_id))
+      })}
+    else if (sn > 0) {
+    output$intro <- renderText(NULL)}
   })
+  
   # End of survey
   observeEvent(input$OK, {
     # Display end text 
-    if (input$OK > n.total) {
+    if (sn > n.total) {
       # Display end text 
       output$end <- renderText(end.text)
     }
     # Quit application 
-    if (input$OK > (n.total + 1)) {
+    if (sn > (n.total + 1)) {
       # Write data to file
       if (!is.null(data.dir)) {
         session$sendCustomMessage("mymessage", user_id)
