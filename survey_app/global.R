@@ -75,6 +75,6 @@ labels <- labels_rus
 attributes <- attributes_rus
 
 b.text <- "Выберете наиболее привлекательное для вас предложение:"
-i.text <- readChar('intro_1.txt', file.info('intro_2.txt')$size)
+i.text <- readChar('intro_1.txt', file.info('intro_1.txt')$size)
 e.text <- "Спасибо за прохождение первой части опроса! Нажмите ОК, чтобы продолжить, и заполните небольшую анкету!"
 
