@@ -11,7 +11,7 @@ jscode <- paste0(
   ,"$('[data-toggle=\"tooltip\"]').tooltip({"
   ,"placement: 'right'"
   ,"});})")
-                
+
 
 fluidPage(
   theme = bs_theme(version = 4),
@@ -30,7 +30,7 @@ fluidPage(
   # put introtext on screen
   column(12, align = 'center', htmlOutput('intro')),
   # Put action button on screen
-  column(12, align = "center", actionButton("OK", "OK")),
+  column(12, align = 'center', uiOutput('button_ui')),
   # put end text on screen
   column(12, align = 'center', textOutput('end'))
 )
