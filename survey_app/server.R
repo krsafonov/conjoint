@@ -361,7 +361,7 @@ function(input, output, session) {
                  })               })
   
   # Count set number
-  observeEvent(input$OK, {sn <<- sn + 1})
+  observeEvent(input$OK, {if(!is.null(input$survey)){sn <<- sn + 1}})
   
   
   #Output response options after first action button click
@@ -377,12 +377,14 @@ function(input, output, session) {
   
   # set nr
   observeEvent(input$OK, {
+    if (!is.null(input$survey)) {
     if (sn <= n.total) {
       output$set.nr <- renderText(paste(c("Вопрос:", sn, "/", n.total)))
-    } else {output$set.nr <- renderText(NULL)} })
+    } else {output$set.nr <- renderText(NULL)} }})
   
   #When action button is clicked
   observeEvent(input$OK, {
+    if(!is.null(input$survey)) {
     if (sn <= n.total) {
       output$table1 <- renderDT({
         datatable(Select(), 
@@ -397,7 +399,7 @@ function(input, output, session) {
     else {
       #Don't show choice set
       output$table1 <- renderDT(NULL)}
-  })
+  }})
   
   
   # Store responses and design
@@ -411,7 +413,7 @@ function(input, output, session) {
     surveyData <<- sdata 
   } 
   
-  observeEvent(input$OK, {
+  observeEvent(input$OK&(!is.null(input$survey)), {
     # Display end text 
     if (sn == n.total + 1) {
       # Display end text 
