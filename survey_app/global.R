@@ -1,7 +1,7 @@
 library("idefix")
 
 al <- list(
-  c("90k", "110k", "140k", "190k"), # wage
+  c("70k", "110k", "150k", "200k"), # wage
   c("10 мин", "30 мин", "60 мин"), # commute time
   c("Full-time", "Гибрид", "Полностью удаленный"), # work mode
   c("Формальная", "Промежуточная", "Неформальная"), # corporate culture
@@ -43,7 +43,7 @@ attributes_eng <- c('wage', 'commute_time', 'sectors', 'work_mode', 'corporate_c
                 'office', 'promotion', 'team_age', 'task')
 
 labels_eng <- vector(mode = "list", length(attributes))
-labels_eng[[1]] <- c("90k", "110k", "140k", "190k") # wage
+labels_eng[[1]] <- c("70k", "110k", "150k", "200k") # wage
 labels_eng[[2]] <- c("10 min", "30 min", "60 min") # commute time
 labels_eng[[3]] <- c("State-owned", "Private", "Non-commerical") # sectors
 labels_eng[[4]] <- c("Full-time", "Hybrid", "Online") # work mode
@@ -58,7 +58,7 @@ attributes_rus <- c('Зарплата', 'Время в пути', 'График 
                     'Офис', 'Потенциал повышения', 'Средний возраст команды', 'Доля неитересных задач')
 
 labels_rus <- vector(mode = "list", length(attributes))
-labels_rus[[1]] <- c("90k", "110k", "140k", "190k") # wage
+labels_rus[[1]] <- c("70k", "110k", "150k", "200k") # wage
 labels_rus[[2]] <- c("10 мин", "30 мин", "60 мин") # commute time
 labels_rus[[3]] <- c("Full-time", "Гибрид", "Полностью удаленный") # work mode
 labels_rus[[4]] <- c("Формальная", "Промежуточная", "Неформальная") # corporate culture
