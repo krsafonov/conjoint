@@ -413,12 +413,14 @@ function(input, output, session) {
     surveyData <<- sdata 
   } 
   
-  observeEvent(input$OK&(!is.null(input$survey)), {
+    observeEvent(input$OK, {
     # Display end text 
     if (sn == n.total + 1) {
       # Display end text 
-      output$end <- renderText(end.text)
-    }
+      output$intro <- renderUI({
+        HTML(sprintf(readChar('end.txt', file.info('end.txt')$size), user_id))
+      } ) }
+      
     # Quit application 
     if (sn == (n.total + 2)) {
       # Write data to file
