@@ -243,19 +243,20 @@ function(input, output, session) {
   # INTRODUCTION
   
   output$intro <- renderUI({
-    HTML(sprintf(intro.text, user_id))
+    # HTML(sprintf(intro.text, user_id))
+    HTML(intro.text)
   })
   
   observeEvent(input$button_1, {
     current_page(2)
     output$intro <- renderUI({
-      HTML(sprintf(readChar('intro_2.txt', file.info('intro_2.txt')$size), user_id))
+      HTML(readChar('intro_2.txt', file.info('intro_2.txt')$size))
     } ) })
   
   observeEvent(input$button_2, {
     current_page(3)
     output$intro <- renderUI({
-      HTML(sprintf(readChar('intro_3.txt', file.info('intro_3.txt')$size), user_id))
+      HTML(readChar('intro_3.txt', file.info('intro_3.txt')$size))
     })
   })
   

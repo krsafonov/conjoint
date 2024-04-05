@@ -6,4 +6,5 @@ setwd("~/Documents/ma/conjoint/survey_app/")
 runApp()
 
 deployApp()
+# deployApp('../post_survey_app/')
 
