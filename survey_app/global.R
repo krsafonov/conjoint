@@ -4,7 +4,7 @@ al <- list(
   c("70k", "110k", "150k", "200k"), # wage
   c("10 мин", "30 мин", "60 мин"), # commute time
   c("Full-time", "Гибрид", "Полностью удаленный"), # work mode
-  c("Формальная", "Промежуточная", "Неформальная"), # corporate culture
+  c("Формальная", "Полуформальная", "Неформальная"), # corporate culture
   c("Хорошо обустроенный", "Средне обустроенный", "Плохо обустроенный"), # Office
   c("В течение 1 года", "В течение 3 лет", "В течение 5 лет"), # promotion criterion
   c("< 25 лет", "25 - 35 лет", "35 - 45 лет", '> 45 лет'), # average age of the team
@@ -61,7 +61,7 @@ labels_rus <- vector(mode = "list", length(attributes))
 labels_rus[[1]] <- c("70k", "110k", "150k", "200k") # wage
 labels_rus[[2]] <- c("10 мин", "30 мин", "60 мин") # commute time
 labels_rus[[3]] <- c("Full-time", "Гибрид", "Полностью удаленный") # work mode
-labels_rus[[4]] <- c("Формальная", "Промежуточная", "Неформальная") # corporate culture
+labels_rus[[4]] <- c("Формальная", "Полуформальная", "Неформальная") # corporate culture
 labels_rus[[5]] <- c("Хорошо обустроенный", "Средне обустроенный", "Плохо обустроенный") # Office
 labels_rus[[6]] <- c("В течение 1 года", "В течение 3 лет", "В течение 5 лет") # promotion criterion
 labels_rus[[7]] <- c("< 25 лет", "25 - 35 лет", "35 - 45 лет", '> 45 лет') # average age of the team
