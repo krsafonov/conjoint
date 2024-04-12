@@ -14,12 +14,12 @@ al <- list(
 mu <- c(70, # no.choice (constant utility)
         1, # wage (constant utility)
         -1/3, # commute time
-        -20, -10, # work mode
-        -20, -10, # corporate culture
-        +20, +10, # Office
-        +20, +10, # promotion criterion
-        +5, +5, -5, # average age of the team
-        0, -5 # task
+        +10, +20, # work mode
+        +10, +20, # corporate culture
+        -10, -20, # Office
+        -10, -20, # promotion criterion
+        +5, -5, -10, # average age of the team
+        0, -10 # task
 )
 
 v <- diag(length(mu[c(-1, -2)])) # Prior variance.
