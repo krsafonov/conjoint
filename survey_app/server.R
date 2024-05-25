@@ -377,7 +377,7 @@ function(input, output, session) {
       sdata[["responses"]] <- resp
       sdata[["design"]] <- fulldes
       sdata[["survey"]] <- choice.sets
-      sdata[["time_spent"]] <- unlist(time_spent$list)
+      sdata[["time_spent"]] <- rep(unlist(time_spent$list), each = n.atts)
       surveyData <<- sdata
     }
   })
