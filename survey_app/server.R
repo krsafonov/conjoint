@@ -210,9 +210,9 @@ function(input, output, session) {
   
   output$button_ui <- renderUI({
     if (current_page() == 1) {
-      actionButton("button_1", "OK")
+      actionButton("button_1", "Далее")
     } else if (current_page() == 2) {
-      actionButton("button_2", "OK")
+      actionButton("button_2", "Далее")
     } else if (current_page() == 3) {
       actionButton("button_3", "Начать опрос")
     } else {
