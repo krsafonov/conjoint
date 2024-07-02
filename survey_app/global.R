@@ -32,26 +32,26 @@ ps <- list(no.choice.pd, pd)
 coded <- c("C", "C", "D", "D", "D", "D", "D", "D")
 alt <- c(0, 0, 0, 1)
 
-exp <- readRDS("design_new.RData")
+exp <- readRDS('june_design.RData')
 
 des <- exp$design
 
 # Survey App
 n.sets <- 25
 alternatives_eng <- c("Alternative A", "Alternative B", "Alternative C", "None")
-attributes_eng <- c('wage', 'commute_time', 'sectors', 'work_mode', 'corporate_culture',
+attributes_eng <- c('wage', 'commute_time', 'work_mode', 'corporate_culture',
                 'office', 'promotion', 'team_age', 'task')
 
 labels_eng <- vector(mode = "list", length(attributes))
 labels_eng[[1]] <- c("70k", "110k", "150k", "200k") # wage
 labels_eng[[2]] <- c("10 min", "30 min", "60 min") # commute time
-labels_eng[[3]] <- c("State-owned", "Private", "Non-commerical") # sectors
-labels_eng[[4]] <- c("Full-time", "Hybrid", "Online") # work mode
-labels_eng[[5]] <- c("Formal", "Intermediate", "Informal") # corporate culture
-labels_eng[[6]] <- c("Good", "Intermediate", "Bad") # Office
-labels_eng[[7]] <- c("yes", "no") # promotion criterion
-labels_eng[[8]] <- c("< 25", "25 - 35", "35 - 45", '> 45') # average age of the team
-labels_eng[[9]] <- c("20%", "50%", "70%") # task
+# labels_eng[[3]] <- c("State-owned", "Private", "Non-commerical") # sectors
+labels_eng[[3]] <- c("Full-time", "Hybrid", "Online") # work mode
+labels_eng[[4]] <- c("Formal", "Intermediate", "Informal") # corporate culture
+labels_eng[[5]] <- c("Good", "Intermediate", "Bad") # Office
+labels_eng[[6]] <- c("yes", "no") # promotion criterion
+labels_eng[[7]] <- c("< 25", "25 - 35", "35 - 45", '> 45') # average age of the team
+labels_eng[[8]] <- c("20%", "50%", "70%") # task
 
 alternatives_rus <- c("Работа A", "Работа B", "Работа C", "Отказаться от всех")
 attributes_rus <- c('Зарплата', 'Время в пути', 'График работы', 'Корпоративная культура',

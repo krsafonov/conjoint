@@ -66,7 +66,7 @@ function(input, output, session) {
   buttons.text = b.text
   intro.text = i.text
   end.text = e.text
-  c.lvls = list(c(90, 110, 140, 190), c(10, 30, 60))
+  c.lvls = list(c(70, 110, 150, 200), c(10, 30, 60))
   data.dir = "./responds/"
   
   user_id = substr(session$token, 1, 8)
@@ -370,19 +370,6 @@ function(input, output, session) {
   })
   
   observeEvent(input$OK, {
-    if (!is.null(input$survey)) {
-      resp <<- c(resp, input$survey)
-      y.bin <<- Charbin(resp = resp, alts = alts, n.alts = n.alts)
-      sdata[["bin.responses"]] <- y.bin
-      sdata[["responses"]] <- resp
-      sdata[["design"]] <- fulldes
-      sdata[["survey"]] <- choice.sets
-      sdata[["time_spent"]] <- rep(unlist(time_spent$list), each = n.atts)
-      surveyData <<- sdata
-    }
-  })
-  
-  observeEvent(input$OK, {
     if (sn == n.total + 1) {
       output$intro <- renderUI({
         HTML(sprintf(readChar('end.txt', file.info('end.txt')$size), user_id))
@@ -394,6 +381,16 @@ function(input, output, session) {
         saveData(data = surveyData, data.dir = data.dir, n.atts = n.atts)
       }
       stopApp()
+    }
+    if (!is.null(input$survey)) {
+      resp <<- c(resp, input$survey)
+      y.bin <<- Charbin(resp = resp, alts = alts, n.alts = n.alts)
+      sdata[["bin.responses"]] <- y.bin
+      sdata[["responses"]] <- resp
+      sdata[["design"]] <- fulldes
+      sdata[["survey"]] <- choice.sets
+      sdata[["time_spent"]] <- rep(unlist(time_spent$list), each = n.atts)
+      surveyData <<- sdata
     }
   })
   
