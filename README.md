@@ -1,4 +1,4 @@
-You can access the project [here](https://krsafonov.shinyapps.io/survey_app/) or [here (Milana's version)](https://milarsenteva.shinyapps.io/survey_app/)..
+You can access the project [here](https://krsafonov.shinyapps.io/survey_app/) or [here (Milana's version)](https://milarsenteva.shinyapps.io/survey_app/).
 
 The project contains two apps: conjoint app (survey_app) and post-experiment survey.
 
