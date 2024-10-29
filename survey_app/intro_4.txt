@@ -31,6 +31,7 @@
       <td style="text-align:center; vertical-align:middle; padding: 20px;">
         <li>1 год до первого повышения</li>
         <li>3 года до первого повышения</li>
+        <li>5 лет до первого повышения</li>
       </td>
     </tr>
 
