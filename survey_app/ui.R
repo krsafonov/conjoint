@@ -2,7 +2,7 @@ library(shiny)
 library(DT)
 library(bslib)
 
-href <- 'https://krsafonov.shinyapps.io/post_survey_app/?user_id='
+href <- 'https://milarsenteva.shinyapps.io/post_survey_app/?user_id='
 
 
 jscode <- paste0(
