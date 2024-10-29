@@ -9,8 +9,8 @@ options(gargle_oauth_cache = ".secrets")
 drive_auth(cache = ".secrets", email = "conjoint894@gmail.com")
 # gs4_auth(token = drive_token())
 
-user_id <- "6666"
-sheet_name <- paste("", user_id, sep="_")
+#user_id <- "6666"
+#sheet_name <- paste("", user_id, sep="_")
 
 # googlesheets4::gs4_create(name = "Response_sheet", 
 #                          sheets = "main")
@@ -20,16 +20,20 @@ sheet_name <- paste("", user_id, sep="_")
 
 # Define questions in the format of a shinysurvey
 survey_questions <- data.frame(
-  question = c(rep("На каком курсе вы сейчас учитесь:", 5),
-               rep("Пол:", 3) ,
+  question = c(rep("Ваш возраст:", 1),
+               rep("На какой программе вы сейчас учитесь:", 6),
+               rep("На каком курсе вы сейчас учитесь:", 4),
+               rep("Пол:", 2) ,
                rep('Назовите ваш опыт работы:', 6), 
                rep('Назовите ваш текущий статус:', 3), 
                rep('Назовите ваш текущий заработок после налогообложения (в месяц, в тысячах рублей):', 10), 
                rep('Назовите индустрию, в которой вы работаете:', 19) #dependent on status - only if works
   ),
   
-  option = c( '1', '2', '3', '4', 'Предпочитаю не отвечать',
-              'Мужской', 'Женский', 'Предпочитаю не отвечать',
+  option = c( NA,
+              'Бакалавр экономики (BAE)', 'Магистр экономики (MAE)', 'Экономика и анализ данных', 'Финансы, инвестиции, банки (MAF)', 'Мастер наук по финансам (MSF)', 'Мастер финансов (MiF)', 
+              '1 курс', '2 курс', '3 курс', '4 курс', 
+              'Мужской', 'Женский', 
               'Нет опыта', 'До 1 года','От 1 года до 3 лет','От 3 до 5 лет','Более 5 лет','Предпочитаю не отвечать',
               'Работаю','Не работаю', 'Предпочитаю не отвечать',
               'Нет постоянного заработка','<50','50-75','75-100','100-125','125-150','150-175','175-200','>200','Предпочитаю не отвечать',
@@ -39,21 +43,23 @@ survey_questions <- data.frame(
               NA
   ),
   
-  input_type = c(rep('mc', 45), 'text'),
+  input_type = c('text', rep('mc', 49), 'text'),
   
-  input_id = c(rep('course', 5),
-               rep('sex', 3),
+  input_id = c('age',
+               rep('program', 6),
+               rep('course', 4),
+               rep('sex', 2),
                rep('experience', 6),
                rep('status', 3),
                rep('income', 10),
                rep('industry', 18),
                'dif_industry'), 
   
-  dependence = c(rep(NA, 27),
+  dependence = c(rep(NA, 32),
                  rep('status', 18),
                  'industry'), 
   
-  dependence_value = c(rep(NA, 27), rep('Работаю', 18), 'Другое'),
+  dependence_value = c(rep(NA, 32), rep('Работаю', 18), 'Другое'),
   
   required = TRUE
 )
@@ -79,6 +85,11 @@ ui <- fluidPage(
 
 # Define shiny server
 server <- function(input, output, session) {
+  
+  if (!dir.exists("surveys")) {
+    dir.create("surveys")
+  }
+  
   data.dir <- "surveys"
   
   renderSurvey()
@@ -92,7 +103,7 @@ server <- function(input, output, session) {
       paste("User ID:", user_id)
     } else {
       "Мы потеряли по пути ваш уникальный идентификатор. Если Вы сохранили его на прошлом этапе, то перейдите
-      по ссылке https://krsafonov.shinyapps.io/post_survey_app/?user_id=... , где вместо троеточия напишите свой номер."
+      по ссылке  https://milarsenteva.shinyapps.io/post_survey_app/?user_id=... , где вместо троеточия напишите свой номер."
     }
   })
   
@@ -110,13 +121,12 @@ server <- function(input, output, session) {
       showModal(modalDialog(
         title = "Уппс",
         "Мы потеряли по пути ваш уникальный идентификатор. Если Вы сохранили его на прошлом этапе, то перейдите
-      по ссылке https://krsafonov.shinyapps.io/post_survey_app/?user_id=... , где вместо троеточия напишите свой номер.",
+      по ссылке  https://milarsenteva.shinyapps.io/post_survey_app/?user_id=... , где вместо троеточия напишите свой номер.",
         footer = actionButton("confirm", "Close")
       ))
     } else {
       
       numname <- sprintf("%s_num_data.txt", user_id)
-      
       utils::write.table(
         x = response_data,
         file = file.path(data.dir, numname), 
@@ -125,7 +135,6 @@ server <- function(input, output, session) {
       drive_upload(file.path(data.dir, numname),
                    file.path("surveys", numname)
       )
-      
       showModal(modalDialog(
         title = "Спасибо за прохождение опроса!",
         "Ваши ответы были сохранены.",
@@ -139,3 +148,4 @@ server <- function(input, output, session) {
 
 # Run the shiny application
 shinyApp(ui, server)
+
