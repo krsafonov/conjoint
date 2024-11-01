@@ -148,4 +148,3 @@ server <- function(input, output, session) {
 
 # Run the shiny application
 shinyApp(ui, server)
-
