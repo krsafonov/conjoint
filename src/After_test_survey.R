@@ -11,8 +11,7 @@ options(gargle_oauth_cache = ".secrets")
 gs4_auth(cache = ".secrets", email = "conjoint894@gmail.com")
 drive_auth(cache = ".secrets", email = "conjoint894@gmail.com")
 
-googlesheets4::gs4_create(name = "Response_sheet", 
-                          sheets = "main")
+# googlesheets4::gs4_create(name = "Response_sheet", sheets = "main")
 
 # Get the ID of the sheet for writing programmatically
 # This should be placed at the top of your shiny app
@@ -26,7 +25,7 @@ survey_questions <- data.frame(
                rep('Назовите ваш текущий статус:', 2), 
                rep('Назовите ваш текущий заработок:', 6), 
                rep('Назовите индустрию, в которой вы работаете:', 9) #dependent on status - only if works
-               ),
+  ),
   
   option = c( '1', '2', '3', '4',
               'мужской', 'женский',
@@ -49,7 +48,7 @@ survey_questions <- data.frame(
   dependence = c(rep(NA, 19),
                  rep('status', 8),
                  'industry'), 
-                 
+  
   dependence_value = c(rep(NA, 19), rep('работаю', 8), 'другое'),
   
   required = TRUE
@@ -71,7 +70,7 @@ server <- function(input, output, session) {
     
     # Read our sheet
     values <- googlesheets4::read_sheet(ss = sheet_id, 
-                         sheet = "main")
+                                        sheet = "main")
     
     # Check to see if our sheet has any existing data.
     # If not, let's write to it and set up column names. 
@@ -79,12 +78,12 @@ server <- function(input, output, session) {
     
     if (nrow(values) == 0) {
       googlesheets4::sheet_write(data = response_data,
-                  ss = sheet_id,
-                  sheet = "main")
+                                 ss = sheet_id,
+                                 sheet = "main")
     } else {
       googlesheets4::sheet_append(data = response_data,
-                   ss = sheet_id,
-                   sheet = "main")
+                                  ss = sheet_id,
+                                  sheet = "main")
     }
     
     
@@ -94,4 +93,3 @@ server <- function(input, output, session) {
 
 # Run the shiny application
 shinyApp(ui, server)
-

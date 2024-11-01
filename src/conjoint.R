@@ -1,25 +1,25 @@
 library("idefix")
 
 al <- list(
-  c("90k", "110k", "140k", "190k"), # wage
-  c("10 мин", "30 мин", "60 мин"), # commute time
+  c("100k", "140k", "180k", "230k"), # wage
+  c("30 мин", "60 мин", "90 мин"), # commute time
   c("Full-time", "Гибрид", "Полностью удаленный"), # work mode
-  c("Формальная", "Промежуточная", "Неформальная"), # corporate culture
-  c("Хорошо обустроенный", "Средне обустроенный", "Плохо обустроенный"), # Office
-  c("В течение 1 года", "В течение 3 лет", "В течение 5 лет"), # promotion criterion
-  c("< 25", "25 - 35", "35 - 45", '> 45'), # average age of the team
+  c("Формальная", "Полуформальная", "Неформальная"), # corporate culture
+  c("Премиальный", "Современный", "Традиционный"), # Office
+  c("Через полгода", "Через 1 год", "Через 2 года"), # promotion criterion
+  c("< 25 лет", "25 - 35 лет", "35 - 45 лет", '> 45 лет'), # average age of the team
   c("20%", "50%", "70%") # task
 )
 
 mu <- c(70, # no.choice (constant utility)
         1, # wage (constant utility)
         -1/3, # commute time
-        -20, -10, # work mode
-        -20, -10, # corporate culture
-        +20, +10, # Office
-        +20, +10, # promotion criterion
-        +5, +5, -5, # average age of the team
-        0, -5 # task
+        +10, +20, # work mode
+        +10, +20, # corporate culture
+        -10, -20, # Office
+        -10, -20, # promotion criterion
+        +5, -5, -10, # average age of the team
+        -15, -30 # task
 )
 
 v <- diag(length(mu[c(-1, -2)])) # Prior variance.
@@ -35,17 +35,23 @@ alt <- c(0, 0, 0, 1)
 exp <- CEA(lvls = c(4, 3, 3, 3, 3, 3, 4, 3),
            coding = coded,
            par.draws = ps,
-           c.lvls = list(c(90, 110, 140, 190), c(10, 30, 60)),
+           c.lvls = list(c(100, 140, 180, 230), c(30, 60, 90)),
            n.alts = 4, n.sets = 25,
            alt.cte = alt,
            no.choice = TRUE)
 
-exp$decoded <- Decode(des = exp$design, n.alts = 4, lvl.names = al, coding = coded, alt.cte = alt,
-       c.lvls = list(c(90, 110, 140, 190), c(10, 30, 60)),
-       no.choice = 4)
+#exp$decoded <- Decode(des = exp$design, n.alts = 4, lvl.names = al, coding = coded, alt.cte = alt,
+#       c.lvls = list(c(100, 140, 180, 230), c(30, 60, 90)),
+#       no.choice = 4)
 
-# saveRDS(exp, file="design.RData")
-# write.csv(exp$decoded[1]$design, "design.csv")
+exp$design
+
+exp1 <- readRDS('june_design.RData')
+exp1$design
+
+
+saveRDS(exp, file="October_design.RData")
+write.csv(exp$decoded[1]$design, "October_design.csv")
 
 # Survey App
 n.sets <- 25
